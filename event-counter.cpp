@@ -32,7 +32,7 @@ static DefaultGUIModel::variable_t vars[] = {
 		| DefaultGUIModel::DOUBLE, },
 	{ "Event Count", "Events detected in specified window", DefaultGUIModel::STATE, }, 
 	{ "Input Signal", "Signal to detect events on", DefaultGUIModel::INPUT, },
-	{ "TTL Output", "Output TTL when event is detected", DefaultGUIModel::INPUT, },
+	{ "TTL Output", "Output TTL when event is detected", DefaultGUIModel::OUTPUT, },
 };
 
 static size_t num_vars = sizeof(vars) / sizeof(DefaultGUIModel::variable_t);
@@ -51,24 +51,25 @@ EventCounter::~EventCounter(void) { }
 void EventCounter::execute(void)
 {
 	systime = count * dt;
+	output(0) = 0;
+
 	if(systime > window_upper_bound)
 	{
-		event_count = 0;
-		window_upper_bound += systime;
+		event_count = (int)counter;
+		counter = 0;
+		window_upper_bound += window;
 	}
-
-	if(systime < window_upper_bound)
+	else
 	{
 		if(input(0) > threshold)
-		{
 			if(RT::OS::getTime() > last_event_time + interval)
 			{
-				event_count++;
+				counter++;
 				output(0) = 5;
 				last_event_time = RT::OS::getTime();
 			}
-		}
 	}
+
 	count++;
 	return;
 }
@@ -80,6 +81,7 @@ void EventCounter::update(DefaultGUIModel::update_flags_t flag) {
 			dt = RT::System::getInstance()->getPeriod() * 1e-9; // time in seconds
 			count = 0;
 			event_count = 0;
+			counter = 0;
 			window = 60; // s
 			window_upper_bound = window; // s
 			threshold = 0.001; // V
@@ -95,7 +97,7 @@ void EventCounter::update(DefaultGUIModel::update_flags_t flag) {
 			window = getParameter("Window").toDouble(); // s
 			threshold = getParameter("Threshold").toDouble(); // V
 			interval = getParameter("Interval").toDouble() * 1e9; // ns
-			count = 0;
+			reset();
 			break;
 
 		case UNPAUSE:
@@ -129,8 +131,10 @@ void EventCounter::customizeGUI(void) {
 void EventCounter::reset(void)
 {
 	count = 0;
+	counter = 0;
 	systime = 0;
 	last_event_time = 0;
 	event_count = 0;
+	window_upper_bound = window; // s
 }
 

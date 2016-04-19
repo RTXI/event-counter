@@ -37,6 +37,7 @@ class EventCounter : public DefaultGUIModel {
 		double window_upper_bound;
 		double threshold;
 		double event_count;
+		int counter;
 		double dt;
 		double systime;
 		long long count;
