@@ -85,11 +85,11 @@ void EventCounter::update(DefaultGUIModel::update_flags_t flag) {
 			window = 60; // s
 			window_upper_bound = window; // s
 			threshold = 0.001; // V
-			interval = 0.1; // s
+			interval = 0.1*1e9; // ns
 			last_event_time = 0;
 			setParameter("Window", window);
 			setParameter("Threshold", threshold);
-			setParameter("Interval", interval);
+			setParameter("Interval", interval*1e-9);
 			setState("Event Count", event_count);
 			break;
 	
