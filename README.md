@@ -1,16 +1,24 @@
-###Event Counter
+### Event Counter
 
-**Requirements:** None  
-**Limitations:** None  
+**Requirements:** none
+**Limitations:** none
 
-![Event Counter](event-counter.png)
+![Event Counter GUI](event-counter.png)
 
 <!--start-->
-This is the plugin template, also known in previous versions as MyPluginGUI. It is designed to provide a simplified interface with which anyone fork into custom RTXI modules. For instructions and tutorials regarding its use, see [the documentation on our website](http://rtxi.org/docs/tutorials/2015/04/15/understanding-plugin-template/). 
+<p><b>EventCounter:</b><br>QWhatsThis description.</p>
 <!--end-->
 
-####Paramaters
-1. GUI Label - Example parameter
+#### Input
+1. input(0) - Input Signal : Signal to detect events on
 
-####States
-1. A State - An example state
+#### Output
+1. output(0) - TTL Output : Output TTL when event is detected
+
+#### Parameters
+1. Window - Window size in seconds for event_counting event
+2. Interval - Interval between events in seconds
+3. Threshold - Detection threshold in volts
+
+#### States
+1. Event Count - Events detected in specified window
