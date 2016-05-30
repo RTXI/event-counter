@@ -1,12 +1,12 @@
 ### Event Counter
 
-**Requirements:** none
-**Limitations:** none
+**Requirements:** None  
+**Limitations:** None  
 
 ![Event Counter GUI](event-counter.png)
 
 <!--start-->
-<p><b>EventCounter:</b><br>QWhatsThis description.</p>
+<p><b>Event Counter:</b><br>Event counter for analog and digital signals with configurable windows, event intervals, and threshold.</p>
 <!--end-->
 
 #### Input
@@ -22,3 +22,4 @@
 
 #### States
 1. Event Count - Events detected in specified window
+2. Event Interval - Duration between detected events in s
