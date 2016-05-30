@@ -43,6 +43,7 @@ class EventCounter : public DefaultGUIModel {
 		long long count;
 		long long last_event_time;
 		long long interval;
+		double event_interval;
 	
 	private slots:
 		void reset(void);

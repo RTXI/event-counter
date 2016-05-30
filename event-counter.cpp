@@ -31,6 +31,8 @@ static DefaultGUIModel::variable_t vars[] = {
 	{ "Threshold", "Detection threshold in volts", DefaultGUIModel::PARAMETER
 		| DefaultGUIModel::DOUBLE, },
 	{ "Event Count", "Events detected in specified window", DefaultGUIModel::STATE, }, 
+	{ "Event Interval", "Duration between detected events in s", DefaultGUIModel::STATE
+		| DefaultGUIModel::DOUBLE, }, 
 	{ "Input Signal", "Signal to detect events on", DefaultGUIModel::INPUT, },
 	{ "TTL Output", "Output TTL when event is detected", DefaultGUIModel::OUTPUT, },
 };
@@ -38,7 +40,7 @@ static DefaultGUIModel::variable_t vars[] = {
 static size_t num_vars = sizeof(vars) / sizeof(DefaultGUIModel::variable_t);
 
 EventCounter::EventCounter(void) : DefaultGUIModel("Event Counter", ::vars, ::num_vars) {
-	setWhatsThis("<p><b>EventCounter:</b><br>QWhatsThis description.</p>");
+	setWhatsThis("<p><b>Event Counter:</b><br>Event counter for analog and digital signals with configurable windows, event intervals, and threshold.</p>");
 	DefaultGUIModel::createGUI(vars, num_vars);
 	customizeGUI();
 	update(INIT);
@@ -66,6 +68,7 @@ void EventCounter::execute(void)
 			{
 				counter++;
 				output(0) = 5;
+				event_interval = (RT::OS::getTime() - last_event_time) * 1e-9;
 				last_event_time = RT::OS::getTime();
 			}
 	}
@@ -87,10 +90,12 @@ void EventCounter::update(DefaultGUIModel::update_flags_t flag) {
 			threshold = 0.001; // V
 			interval = 0.1*1e9; // ns
 			last_event_time = 0;
+			event_interval = 0;
 			setParameter("Window", window);
 			setParameter("Threshold", threshold);
 			setParameter("Interval", interval*1e-9);
 			setState("Event Count", event_count);
+			setState("Event Interval", event_interval);
 			break;
 	
 		case MODIFY:
